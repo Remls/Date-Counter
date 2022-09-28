@@ -44,22 +44,22 @@
     
             <div>
                 <input type="checkbox" x-model="skipWeekends" name="skipWeekends" @input="clearOutput()">
-                <label for="skipWeekends">Skip weekends?</label>
+                <label for="skipWeekends" @click="toggle('skipWeekends')">Skip weekends?</label>
             </div>
     
             <div>
                 <input type="checkbox" x-model="skipHolidays" name="skipHolidays" @input="clearOutput()">
-                <label for="skipHolidays">Skip holidays?</label>
+                <label for="skipHolidays" @click="toggle('skipHolidays')">Skip holidays?</label>
             </div>
 
             <div>
                 <input type="checkbox" x-model="includeStartDate" name="includeStartDate" @input="clearOutput()">
-                <label for="includeStartDate">Include start date while counting?</label>
+                <label for="includeStartDate" @click="toggle('includeStartDate')">Include start date while counting?</label>
             </div>
 
             <div>
                 <input type="checkbox" x-model="includeEndDate" name="includeEndDate" @input="clearOutput()">
-                <label for="includeEndDate">Include end date while counting?</label>
+                <label for="includeEndDate" @click="toggle('includeEndDate')">Include end date while counting?</label>
             </div>
     
             <div>
@@ -124,6 +124,11 @@
 
             getDaysToCount() {
                 return Number(this.daysToCount);
+            },
+
+            toggle(v) {
+                this[v] = !this[v];
+                this.clearOutput();
             },
 
             clearOutput() {
