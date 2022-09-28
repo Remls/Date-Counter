@@ -43,13 +43,23 @@
             </div>
     
             <div>
-                <label for="skipWeekends">Skip weekends?</label>
                 <input type="checkbox" x-model="skipWeekends" name="skipWeekends" @input="clearOutput()">
+                <label for="skipWeekends">Skip weekends?</label>
             </div>
     
             <div>
-                <label for="skipHolidays">Skip holidays?</label>
                 <input type="checkbox" x-model="skipHolidays" name="skipHolidays" @input="clearOutput()">
+                <label for="skipHolidays">Skip holidays?</label>
+            </div>
+
+            <div>
+                <input type="checkbox" x-model="includeStartDate" name="includeStartDate" @input="clearOutput()">
+                <label for="includeStartDate">Include start date while counting?</label>
+            </div>
+
+            <div>
+                <input type="checkbox" x-model="includeEndDate" name="includeEndDate" @input="clearOutput()">
+                <label for="includeEndDate">Include end date while counting?</label>
             </div>
     
             <div>
@@ -63,7 +73,7 @@
                 <template x-for="line in output">
                     <tr>
                         <td>
-                            <span x-text="line.date.toFormat('d MMMM yyyy')"></span>
+                            <span x-text="line.date.toFormat('d MMMM yyyy, EEE')"></span>
                         </td>
                         <td>
                             <span :class="{'red': line.skip }" x-text="line.text"></span>
@@ -84,6 +94,9 @@
             daysToCount: 60,
             skipWeekends: true,
             skipHolidays: true,
+            includeStartDate: false,
+            includeEndDate: false,
+
             output: [],
             error: null,
 
@@ -122,13 +135,18 @@
                 if (!this.isValid()) return;
 
                 let dateToDisplay = luxon.DateTime.fromISO(this.startDate);
-                this.output.push({ date: dateToDisplay, text: 'start' });
+                let textToDisplay = 'start';
                 let counter = 1;
-                while (counter <= this.getDaysToCount() + 1) {
+                if (this.includeStartDate) {
+                    textToDisplay = '1 (start)';
+                    counter = 2;
+                }
+                let endCountAt = this.getDaysToCount() + 1;
+                if (this.includeEndDate) endCountAt = this.getDaysToCount();
+                this.output.push({ date: dateToDisplay, text: textToDisplay });
+                while (counter <= endCountAt) {
                     let skipThisDate = false;
-                    let textToDisplay = counter;
-                    if (counter === this.getDaysToCount() + 1)
-                        textToDisplay = 'end';
+                    textToDisplay = counter;
 
                     dateToDisplay = dateToDisplay.plus({ days: 1 });
 
@@ -150,6 +168,11 @@
 
                     this.output.push({ date: dateToDisplay, skip: skipThisDate, text: textToDisplay });
                     if (!skipThisDate) counter++;
+                }
+                if (this.includeEndDate) {
+                    this.output[this.output.length-1].text += ' (end)';
+                } else {
+                    this.output[this.output.length-1].text = 'end';
                 }
             }
         }
