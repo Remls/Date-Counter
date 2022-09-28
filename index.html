@@ -11,6 +11,9 @@
         label {
             font-weight: bold;
         }
+        .form div {
+            padding: 0.5rem;
+        }
         .red {
             color: red;
         }
@@ -28,14 +31,30 @@
 </head>
 <body>
     <div x-data="alp">
-        <div>
-            <label for="startDate">Start date:</label>
-            <input type="date" x-model="startDate" name="startDate" @input="recompute()">
-        </div>
-        
-        <div>
-            <label for="daysToCount">Days to count:</label>
-            <input type="number" x-model="daysToCount" name="daysToCount" @input="recompute()">
+        <div class="form">
+            <div>
+                <label for="startDate">Start date:</label>
+                <input type="date" x-model="startDate" name="startDate" @input="clearOutput()">
+            </div>
+            
+            <div>
+                <label for="daysToCount">Days to count:</label>
+                <input type="number" x-model="daysToCount" name="daysToCount" @input="clearOutput()">
+            </div>
+    
+            <div>
+                <label for="skipWeekends">Skip weekends?</label>
+                <input type="checkbox" x-model="skipWeekends" name="skipWeekends" @input="clearOutput()">
+            </div>
+    
+            <div>
+                <label for="skipHolidays">Skip holidays?</label>
+                <input type="checkbox" x-model="skipHolidays" name="skipHolidays" @input="clearOutput()">
+            </div>
+    
+            <div>
+                <button @click="recompute()">Load</button>
+            </div>
         </div>
 
         <div style="padding-top: 5px;">
@@ -63,6 +82,8 @@
         const alp = {
             startDate: null,
             daysToCount: 60,
+            skipWeekends: true,
+            skipHolidays: true,
             output: [],
             error: null,
 
@@ -91,6 +112,11 @@
             getDaysToCount() {
                 return Number(this.daysToCount);
             },
+
+            clearOutput() {
+                this.output = [];
+                this.error = null;
+            },
             
             recompute() {
                 if (!this.isValid()) return;
@@ -106,16 +132,20 @@
 
                     dateToDisplay = dateToDisplay.plus({ days: 1 });
 
-                    if (dateToDisplay.weekday === 5 || dateToDisplay.weekday === 6) {
-                        skipThisDate = true;
-                        textToDisplay = 'skipped because weekend';
+                    if (this.skipWeekends) {
+                        if (dateToDisplay.weekday === 5 || dateToDisplay.weekday === 6) {
+                            skipThisDate = true;
+                            textToDisplay = 'skipped because weekend';
+                        }
                     }
 
-                    const dateKey = dateToDisplay.toFormat('yyyy-MM-dd');
-                    if (dateKey in holidays) {
-                        const holiday = holidays[dateKey];
-                        skipThisDate = true;
-                        textToDisplay = `skipped because holiday (${holiday})`;
+                    if (this.skipHolidays) {
+                        const dateKey = dateToDisplay.toFormat('yyyy-MM-dd');
+                        if (dateKey in holidays) {
+                            const holiday = holidays[dateKey];
+                            skipThisDate = true;
+                            textToDisplay = `skipped because holiday (${holiday})`;
+                        }
                     }
 
                     this.output.push({ date: dateToDisplay, skip: skipThisDate, text: textToDisplay });
