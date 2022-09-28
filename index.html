@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.4/build/global/luxon.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.10.3/dist/cdn.min.js"></script>
+    <title>Date Counter</title>
+    <style>
+        label {
+            font-weight: bold;
+        }
+        .red {
+            color: red;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid;
+            padding: 0.5rem;
+        }
+        td {
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div x-data="alp">
+        <div>
+            <label for="startDate">Start date:</label>
+            <input type="date" x-model="startDate" name="startDate" @input="recompute()">
+        </div>
+        
+        <div>
+            <label for="daysToCount">Days to count:</label>
+            <input type="number" x-model="daysToCount" name="daysToCount" @input="recompute()">
+        </div>
+
+        <div style="padding-top: 5px;">
+            <div class="red" x-text="error"></div>
+            <table>
+                <template x-for="line in output">
+                    <tr>
+                        <td>
+                            <span x-text="line.date.toFormat('d MMMM yyyy')"></span>
+                        </td>
+                        <td>
+                            <span :class="{'red': line.skip }" x-text="line.text"></span>
+                        </td>
+                    </tr>
+                </template>
+            </table>
+        </div>
+    </div>
+    <script>
+        let holidays = {}
+        fetch('./holidays.json')
+            .then((response) => response.json())
+            .then((data) => holidays = data);
+
+        const alp = {
+            startDate: null,
+            daysToCount: 60,
+            output: [],
+            error: null,
+
+            isValid() {
+                this.output = [];
+                this.error = null;
+                if (!this.startDate) {
+                    this.error = "Please select a start date.";
+                    return false;
+                }
+                if (!this.daysToCount) {
+                    this.error = "Please select number of days to count.";
+                    return false;
+                }
+                if (this.getDaysToCount() < 0) {
+                    this.error = "Days to count must be a positive integer.";
+                    return false;
+                }
+                if (this.getDaysToCount() > 1000) {
+                    this.error = "Days to count must be less than 1000.";
+                    return false;
+                }
+                return true;
+            },
+
+            getDaysToCount() {
+                return Number(this.daysToCount);
+            },
+            
+            recompute() {
+                if (!this.isValid()) return;
+
+                let dateToDisplay = luxon.DateTime.fromISO(this.startDate);
+                this.output.push({ date: dateToDisplay, text: 'start' });
+                let counter = 1;
+                while (counter <= this.getDaysToCount() + 1) {
+                    let skipThisDate = false;
+                    let textToDisplay = counter;
+                    if (counter === this.getDaysToCount() + 1)
+                        textToDisplay = 'end';
+
+                    dateToDisplay = dateToDisplay.plus({ days: 1 });
+
+                    if (dateToDisplay.weekday === 5 || dateToDisplay.weekday === 6) {
+                        skipThisDate = true;
+                        textToDisplay = 'skipped because weekend';
+                    }
+
+                    const dateKey = dateToDisplay.toFormat('yyyy-MM-dd');
+                    if (dateKey in holidays) {
+                        const holiday = holidays[dateKey];
+                        skipThisDate = true;
+                        textToDisplay = `skipped because holiday (${holiday})`;
+                    }
+
+                    this.output.push({ date: dateToDisplay, skip: skipThisDate, text: textToDisplay });
+                    if (!skipThisDate) counter++;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
