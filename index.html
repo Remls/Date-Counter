@@ -8,6 +8,9 @@
     <script defer src="https://unpkg.com/alpinejs@3.10.3/dist/cdn.min.js"></script>
     <title>Date Counter</title>
     <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
         label {
             font-weight: bold;
         }
@@ -26,6 +29,9 @@
         }
         td {
             width: 50%;
+        }
+        .center {
+            text-align: center;
         }
     </style>
 </head>
@@ -75,7 +81,7 @@
                         <td>
                             <span x-text="line.date.toFormat('d MMMM yyyy, EEE')"></span>
                         </td>
-                        <td>
+                        <td class="center">
                             <span :class="{'red': line.skip }" x-text="line.text"></span>
                         </td>
                     </tr>
