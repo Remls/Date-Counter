@@ -1,0 +1,44 @@
+@media screen and (min-width : 1024px){
+    body {
+        padding: 2rem 5rem;
+    }
+}
+@media screen and (max-width : 1023px){
+    body {
+        padding: 2rem;
+    }
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+.form div {
+    padding-top: 0.5rem;
+}
+.form label {
+    font-weight: bold;
+    padding: 0 5px;
+}
+
+.error-text {
+    color: red;
+}
+.center {
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid;
+    padding: 0.5rem;
+}
+td {
+    width: 50%;
+}

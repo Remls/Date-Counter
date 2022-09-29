@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
@@ -15,39 +15,14 @@
     <meta name="msapplication-config" content="/assets/icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
+    <link rel="stylesheet" href="assets/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.4/build/global/luxon.min.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.10.3/dist/cdn.min.js"></script>
+    <script src="assets/scripts.js"></script>
     <title>Date Counter</title>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        label {
-            font-weight: bold;
-        }
-        .form div {
-            padding: 0.5rem;
-        }
-        .red {
-            color: red;
-        }
-        table {
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid;
-            padding: 0.5rem;
-        }
-        td {
-            width: 50%;
-        }
-        .center {
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
-    <div x-data="alp">
+    <div x-data="dateCounter">
         <div class="form">
             <div>
                 <label for="startDate">Start date:</label>
@@ -61,22 +36,22 @@
     
             <div>
                 <input type="checkbox" x-model="skipWeekends" name="skipWeekends" @input="clearOutput()">
-                <label for="skipWeekends" @click="toggle('skipWeekends')">Skip weekends?</label>
+                <label for="skipWeekends" @click="toggle('skipWeekends')">Skip weekends</label>
             </div>
     
             <div>
                 <input type="checkbox" x-model="skipHolidays" name="skipHolidays" @input="clearOutput()">
-                <label for="skipHolidays" @click="toggle('skipHolidays')">Skip holidays?</label>
+                <label for="skipHolidays" @click="toggle('skipHolidays')">Skip holidays</label>
             </div>
 
             <div>
                 <input type="checkbox" x-model="includeStartDate" name="includeStartDate" @input="clearOutput()">
-                <label for="includeStartDate" @click="toggle('includeStartDate')">Include start date while counting?</label>
+                <label for="includeStartDate" @click="toggle('includeStartDate')">Include start date while counting</label>
             </div>
 
             <div>
                 <input type="checkbox" x-model="includeEndDate" name="includeEndDate" @input="clearOutput()">
-                <label for="includeEndDate" @click="toggle('includeEndDate')">Include end date while counting?</label>
+                <label for="includeEndDate" @click="toggle('includeEndDate')">Include end date while counting</label>
             </div>
     
             <div>
@@ -85,7 +60,7 @@
         </div>
 
         <div style="padding-top: 5px;">
-            <div class="red" x-text="error"></div>
+            <div class="error-text" x-text="error"></div>
             <table>
                 <template x-for="line in output">
                     <tr>
@@ -93,111 +68,12 @@
                             <span x-text="line.date.toFormat('d MMMM yyyy, EEE')"></span>
                         </td>
                         <td class="center">
-                            <span :class="{'red': line.skip }" x-text="line.text"></span>
+                            <span :class="{'error-text': line.skip }" x-text="line.text"></span>
                         </td>
                     </tr>
                 </template>
             </table>
         </div>
     </div>
-    <script>
-        let holidays = {}
-        fetch('./holidays.json')
-            .then((response) => response.json())
-            .then((data) => holidays = data);
-
-        const alp = {
-            startDate: null,
-            daysToCount: 60,
-            skipWeekends: true,
-            skipHolidays: true,
-            includeStartDate: false,
-            includeEndDate: false,
-
-            output: [],
-            error: null,
-
-            isValid() {
-                this.output = [];
-                this.error = null;
-                if (!this.startDate) {
-                    this.error = "Please select a start date.";
-                    return false;
-                }
-                if (!this.daysToCount) {
-                    this.error = "Please select number of days to count.";
-                    return false;
-                }
-                if (this.getDaysToCount() < 0) {
-                    this.error = "Days to count must be a positive integer.";
-                    return false;
-                }
-                if (this.getDaysToCount() > 1000) {
-                    this.error = "Days to count must be less than 1000.";
-                    return false;
-                }
-                return true;
-            },
-
-            getDaysToCount() {
-                return Number(this.daysToCount);
-            },
-
-            toggle(v) {
-                this[v] = !this[v];
-                this.clearOutput();
-            },
-
-            clearOutput() {
-                this.output = [];
-                this.error = null;
-            },
-            
-            recompute() {
-                if (!this.isValid()) return;
-
-                let dateToDisplay = luxon.DateTime.fromISO(this.startDate);
-                let textToDisplay = 'start';
-                let counter = 1;
-                if (this.includeStartDate) {
-                    textToDisplay = '1 (start)';
-                    counter = 2;
-                }
-                let endCountAt = this.getDaysToCount() + 1;
-                if (this.includeEndDate) endCountAt = this.getDaysToCount();
-                this.output.push({ date: dateToDisplay, text: textToDisplay });
-                while (counter <= endCountAt) {
-                    let skipThisDate = false;
-                    textToDisplay = counter;
-
-                    dateToDisplay = dateToDisplay.plus({ days: 1 });
-
-                    if (this.skipWeekends) {
-                        if (dateToDisplay.weekday === 5 || dateToDisplay.weekday === 6) {
-                            skipThisDate = true;
-                            textToDisplay = 'skipped because weekend';
-                        }
-                    }
-
-                    if (this.skipHolidays) {
-                        const dateKey = dateToDisplay.toFormat('yyyy-MM-dd');
-                        if (dateKey in holidays) {
-                            const holiday = holidays[dateKey];
-                            skipThisDate = true;
-                            textToDisplay = `skipped because holiday (${holiday})`;
-                        }
-                    }
-
-                    this.output.push({ date: dateToDisplay, skip: skipThisDate, text: textToDisplay });
-                    if (!skipThisDate) counter++;
-                }
-                if (this.includeEndDate) {
-                    this.output[this.output.length-1].text += ' (end)';
-                } else {
-                    this.output[this.output.length-1].text = 'end';
-                }
-            }
-        }
-    </script>
 </body>
 </html>
