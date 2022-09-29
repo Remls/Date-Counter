@@ -3,9 +3,25 @@ fetch('./assets/data/holidays.json')
     .then((response) => response.json())
     .then((data) => holidays = data);
 
-let presets = {}
-
 document.addEventListener('alpine:init', () => {
+    Alpine.store('presets', {
+        data: {},
+        dataAsArray: [],
+
+        init() {
+            fetch('./assets/data/presets.json')
+                .then((response) => response.json())
+                .then((data) => {
+                    this.data = data;
+                    this.dataAsArray = Object.keys(data).map(key => ({ key, ...data[key] }));
+                });
+        },
+
+        get(key) {
+            return this.data[key];
+        }
+    });
+
     Alpine.data('dateCounter', () => ({
         startDate: null,
         daysToCount: 60,
@@ -13,7 +29,7 @@ document.addEventListener('alpine:init', () => {
         skipHolidays: true,
         includeStartDate: false,
         includeEndDate: false,
-
+        selectedPreset: null,
         output: [],
         error: null,
 
@@ -43,12 +59,29 @@ document.addEventListener('alpine:init', () => {
             return Number(this.daysToCount);
         },
 
-        toggle(v) {
-            this[v] = !this[v];
-            this.clearOutput();
+        selectPreset(key) {
+            this.selectedPreset = key;
+            const preset = this.$store.presets.get(key);
+            [
+                'daysToCount',
+                'skipWeekends',
+                'skipHolidays',
+                'includeStartDate',
+                'includeEndDate',
+            ].forEach(prop => {
+                this[prop] = preset[prop];
+            });
         },
 
-        clearOutput() {
+        toggle(v) {
+            this[v] = !this[v];
+            this.clearOutput(true);
+        },
+
+        clearOutput(alsoChangePreset = false) {
+            if (alsoChangePreset) {
+                this.selectedPreset = null;
+            }
             this.output = [];
             this.error = null;
         },

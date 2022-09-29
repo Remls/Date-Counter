@@ -1,0 +1,74 @@
+{
+    "appeal_civil": {
+        "descriptionDv": "ދަށު ކޯޓަކުން މަދަނީ މައްސަލަތަކާ ގުޅިގެން ނިންމާފައިވާ ނިންމުންތަކާއި ކޮށްފައިވާ ޙުކުމްތައް އިސްތިއުނާފުކުރުން",
+        "daysToCount": 10,
+        "skipWeekends": true,
+        "skipHolidays": true,
+        "includeStartDate": false,
+        "includeEndDate": false
+    },
+    "appeal_criminal_verdict": {
+        "descriptionDv": "ދަށު ކޯޓަކުން ޖިނާއީ މައްސަލަތަކާ ގުޅިގެން ކޮށްފައިވާ ޙުކުމްތައް އިސްތިއުނާފުކުރުން",
+        "daysToCount": 60,
+        "skipWeekends": true,
+        "skipHolidays": true,
+        "includeStartDate": false,
+        "includeEndDate": false
+    },
+    "appeal_criminal_court_order": {
+        "descriptionDv": "ޖިނާއީ މައްސަލަތަކާ ގުޅިގެން ދަށު ކޯޓަކުން ނެރެފައިވާ އަމުރެއް ނުވަތަ ޝަރީޢަތުގެ ކުރިން ހުށަހަޅާ ހުށަހެޅުމާ ގުޅޭގޮތުން އެ ކޯޓުން ނިންމާފައިވާ ނިންމުމެއް އިސްތިއުނާފުކުރުން",
+        "daysToCount": 10,
+        "skipWeekends": true,
+        "skipHolidays": true,
+        "includeStartDate": false,
+        "includeEndDate": false
+    },
+    "appeal_tax": {
+        "descriptionDv": "ޓެކްސް އެޕީލް ޓްރައިބިއުނަލްގެ ނިންމުންތައް އިސްތިއުނާފުކުރުން",
+        "daysToCount": 60,
+        "skipWeekends": true,
+        "skipHolidays": true,
+        "includeStartDate": false,
+        "includeEndDate": false
+    },
+    "appeal_employment": {
+        "descriptionDv": "ވަޒީފާއާ ބެހޭ ޓްރައިބިއުނަލްގެ ނިންމުންތައް އިސްތިއުނާފުކުރުން",
+        "daysToCount": 10,
+        "skipWeekends": true,
+        "skipHolidays": true,
+        "includeStartDate": false,
+        "includeEndDate": false
+    },
+    "appeal_information_commissioner": {
+        "descriptionDv": "މަޢުލޫމާތު ހޯދައި ލިބިގަތުމުގެ މައްސަލަތަކާ ގުޅިގެން އިންފޮމޭޝަން ކޮމިޝަނަރު ނިންމާ ނިންމުންތައް އިސްތިއުނާފުކުރުން",
+        "daysToCount": 10,
+        "skipWeekends": true,
+        "skipHolidays": true,
+        "includeStartDate": false,
+        "includeEndDate": false
+    },
+    "appeal_arbitral_tribunal_jurisdiction": {
+        "descriptionDv": "އާބިޓްރޭޝަން މައްސަލަތަކުގައި އާބިޓްރަލް ޓްރައިބިއުނަލުގެ އިޚްތިޞާޞާ ގުޅޭ މައްސަލަތައް ހުށަހެޅުން",
+        "daysToCount": 30,
+        "skipWeekends": true,
+        "skipHolidays": true,
+        "includeStartDate": false,
+        "includeEndDate": false
+    },
+    "appeal_elections": {
+        "descriptionDv": "އިންތިޚާބީ ޝަކުވާގެ މައްސަލަތައް ހުށަހެޅުން",
+        "daysToCount": 14,
+        "skipWeekends": true,
+        "skipHolidays": true,
+        "includeStartDate": false,
+        "includeEndDate": false
+    },
+    "appeal_voters_registry_disputes": {
+        "descriptionDv": "ވޯޓުދިނުމުގެ ޙައްޤު ލިބިގެންވާ މީހުންގެ ރަޖިސްޓްރީއާ ގުޅޭ ޝަކުވާ ހުށަހެޅުން",
+        "daysToCount": 5,
+        "skipWeekends": true,
+        "skipHolidays": true,
+        "includeStartDate": false,
+        "includeEndDate": false
+    }
+}

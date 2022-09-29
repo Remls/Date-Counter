@@ -22,7 +22,7 @@
     <title>Date Counter</title>
 </head>
 <body>
-    <div x-data="dateCounter">
+    <div x-data="dateCounter" x-init="$watch('selectedPreset', v => clearOutput())">
         <div class="form">
             <div>
                 <label for="startDate">Start date:</label>
@@ -31,28 +31,38 @@
             
             <div>
                 <label for="daysToCount">Days to count:</label>
-                <input type="number" x-model="daysToCount" name="daysToCount" @input="clearOutput()">
+                <input type="number" x-model="daysToCount" name="daysToCount" @input="clearOutput(true)">
             </div>
     
             <div>
-                <input type="checkbox" x-model="skipWeekends" name="skipWeekends" @input="clearOutput()">
+                <input type="checkbox" x-model="skipWeekends" name="skipWeekends" @input="clearOutput(true)">
                 <label for="skipWeekends" @click="toggle('skipWeekends')">Skip weekends</label>
             </div>
     
             <div>
-                <input type="checkbox" x-model="skipHolidays" name="skipHolidays" @input="clearOutput()">
+                <input type="checkbox" x-model="skipHolidays" name="skipHolidays" @input="clearOutput(true)">
                 <label for="skipHolidays" @click="toggle('skipHolidays')">Skip holidays</label>
             </div>
 
             <div>
-                <input type="checkbox" x-model="includeStartDate" name="includeStartDate" @input="clearOutput()">
+                <input type="checkbox" x-model="includeStartDate" name="includeStartDate" @input="clearOutput(true)">
                 <label for="includeStartDate" @click="toggle('includeStartDate')">Include start date while counting</label>
             </div>
 
             <div>
-                <input type="checkbox" x-model="includeEndDate" name="includeEndDate" @input="clearOutput()">
+                <input type="checkbox" x-model="includeEndDate" name="includeEndDate" @input="clearOutput(true)">
                 <label for="includeEndDate" @click="toggle('includeEndDate')">Include end date while counting</label>
             </div>
+
+            <fieldset>
+                <legend>Presets:</legend>
+                    <template x-for="preset in $store.presets.dataAsArray">
+                        <div class="faruma">
+                            <input type="radio" :id="preset.key" name="selectedPreset" :value="preset.key" x-model="selectedPreset" @change="selectPreset(preset.key)">
+                            <span :for="preset.key" x-text="preset.descriptionDv" @click="selectPreset(preset.key)"></span>
+                        </div>
+                    </template>
+            </fieldset>
     
             <div>
                 <button @click="recompute()">Load</button>

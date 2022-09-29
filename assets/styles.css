@@ -9,6 +9,14 @@
     }
 }
 
+@font-face {
+    font-family: Faruma;
+    src: url('fonts/Faruma.ttf');
+}
+.faruma {
+    font-family: Faruma, Arial, Helvetica, sans-serif;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -17,10 +25,13 @@ body {
     display: flex;
     flex-direction: column;
 }
-.form div {
+.form > div {
     padding-top: 0.5rem;
 }
-.form label {
+.form > fieldset {
+    margin-top: 0.5rem;
+}
+.form label, .form > fieldset > legend {
     font-weight: bold;
     padding: 0 5px;
 }
@@ -34,6 +45,7 @@ body {
 
 table {
     border-collapse: collapse;
+    margin: 0 auto;
 }
 table, th, td {
     border: 1px solid;
