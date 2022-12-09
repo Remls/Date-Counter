@@ -113,11 +113,14 @@ document.addEventListener('alpine:init', () => {
                 }
 
                 if (this.skipHolidays) {
-                    const dateKey = dateToDisplay.toFormat('yyyy-MM-dd');
-                    if (dateKey in holidays) {
-                        const holiday = holidays[dateKey];
-                        skipThisDate = true;
-                        textToDisplay = `skipped because holiday (${holiday})`;
+                    const yearKey = dateToDisplay.toFormat('yyyy');
+                    const dateKey = dateToDisplay.toFormat('MM-dd');
+                    if (yearKey in holidays) {
+                        if (dateKey in holidays[yearKey]) {
+                            const holiday = holidays[yearKey][dateKey];
+                            skipThisDate = true;
+                            textToDisplay = `skipped because holiday (${holiday})`;
+                        }
                     }
                 }
 
