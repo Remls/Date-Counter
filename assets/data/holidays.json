@@ -54,5 +54,26 @@
         "10-17": "The Day Maldives Embraced Islam",
         "11-03": "Victory Day",
         "11-11": "Republic Day"
+    },
+    "2024": {
+        "01-01": "New Year",
+        "03-11": "Start of Ramadan",
+        "04-10": "Fitr Eid",
+        "04-11": "Fitr Eid Holiday",
+        "04-12": "Fitr Eid Holiday",
+        "05-01": "Labor Day",
+        "06-16": "Hajj Day",
+        "06-17": "Al'haa Eid",
+        "06-18": "Al'haa Eid Holiday",
+        "06-19": "Al'haa Eid Holiday",
+        "06-20": "Al'haa Eid Holiday",
+        "07-07": "Islamic New Year",
+        "07-26": "Independence Day",
+        "07-27": "Independence Day Holiday",
+        "09-04": "National Day",
+        "09-15": "Milad un-Nabi",
+        "10-05": "The Day Maldives Embraced Islam",
+        "11-03": "Victory Day",
+        "11-11": "Republic Day"
     }
 }
